@@ -4,6 +4,7 @@ map.__index = map
 map.new = function(res, max)
 
 	local t = setmetatable({map = {}}, map)
+	t.max = max
 	for x = 1, res do
 		t.map[x] = {}
 		for y = 1, res do
@@ -37,6 +38,10 @@ function map:pass()
 							if t[x+dx][y+dy] then
 								s = s + t[x+dx][y+dy]
 								n = n + 1
+								if ((math.abs(dx) == 1) and (dy == 0)) or ((math.abs(dy) == 1) and (dx == 0)) then
+									s = s + t[x+dx][y+dy]
+									n = n + 1
+								end
 							end
 						end
 					end
@@ -60,10 +65,15 @@ end
 function map:render(colors)
 
 	local c = love.graphics.newCanvas(#self.map, #self.map)
+	local getColor = love.graphics.getColor
+	local rect = love.graphics.rectangle
+	local p = print
 	for x = 1, #self.map do
 		for y = 1, #self.map do
 			love.graphics.setColor(colors[self.map[x][y]])
-			c:renderTo(function() love.graphics.point(x, y) end)
+			--c:renderTo(function() love.graphics.point(x, y) print(love.graphics.getColor()) end)
+			c:renderTo(function() rect('fill', x-.5, y-.5, 1, 1) end)
+			--rect('fill', x-.5, y-.5, 1, 1)
 		end
 	end
 	self.canvas = c
