@@ -1,4 +1,5 @@
 local map = require 'newMap'
+require 'ffiImageData'
 
 print((love.graphics.getSystemLimit or love.graphics.getMaxImageSize) "texturesize")
 
